@@ -72,8 +72,8 @@ params = {
             'evolution_params':
             {
                 'pop_size': pop_size,
-                'p_m': 1,
-                'p_c': 0
+                'p_m': 0,
+                'p_c': 1
             }
         }
     }
