@@ -9,6 +9,7 @@ from evolution.selectionstrategy import *
 def main():
 
     curdir = os.getcwd()
+    # TODO Use to lower case here
     while not curdir.endswith("Evaluating_Evolutionary_Art"):
         os.chdir(os.path.dirname(curdir))
         curdir = os.getcwd()
@@ -43,7 +44,7 @@ def main():
                     'tree_params':
                     {
                         'method': 'hybrid',
-                        'd_max': 9
+                        'd_max': 7
                     },
                     'ca_params':
                     {
