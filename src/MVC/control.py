@@ -1,9 +1,6 @@
-from src.MVC.model import Model
-from src.MVC.view import View
 from src.utils.archiver import Archiver
 from src.MVC.model import Model
 from src.MVC.view import View
-from src.MVC.kivyview import ViewApp
 import tkinter as Tk  # python 3
 from typing import List
 import numpy as np
@@ -19,7 +16,6 @@ class Control:
         self.archiver = Archiver()
         self.model = Model(self, self.archiver, self.params['model_params'])
         self.view = View(self, self.archiver, self.root, self.params['view_params'])
-        # self.view = ViewApp()
 
 
     def update_score_buffer(self, scores):
@@ -36,6 +32,7 @@ class Control:
 
     def run(self):
         self.root.mainloop()
+
         # self.view.run()
 
     def set_image_dimensions(self, dimx, dimy):
