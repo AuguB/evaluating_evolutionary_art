@@ -1,11 +1,7 @@
 import copy
-import random
+import numpy as np
 from abc import ABC, abstractmethod
-from random import sample
-
-from numpy.random import *
-
-
+import random
 class EvolutionStrategy(ABC):
     def __init__(self, params):
         self.params = params
@@ -26,16 +22,16 @@ class GP(EvolutionStrategy):
 
     def generate(self, selection):
         new_pop = []
-        r = random.random()
+        r = np.random.random()
         while len(new_pop) < self.params['pop_size']:
             if r < self.params['p_m']:
-                ind1 = sample(selection, 1)[0]
+                ind1 = random.sample(selection, 1)[0]
                 new_pop.append(ind1.mutate())
             elif r < self.params['p_m'] + self.params['p_c']:
-                ind1, ind2 = sample(selection, 2)
+                ind1, ind2 =  random.sample(selection, 2)
                 new_pop.extend(ind1.crossover(ind2))
             else:
-                ind1 = sample(selection, 1)[0]
+                ind1 =  random.sample(selection, 1)[0]
                 new_pop.append(ind1)
         return new_pop[:self.params['pop_size']]
 

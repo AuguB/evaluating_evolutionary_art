@@ -12,7 +12,7 @@ from src.evolution.selectionstrategy import *
 
 # pattern =
 curdir = os.getcwd()
-while not curdir.endswith("NatCo-Project"):
+while not curdir.endswith("Evaluating_Evolutionary_Art"):
     os.chdir(os.path.dirname(curdir))
     curdir = os.getcwd()
 
@@ -38,7 +38,7 @@ evofram_params = {
     },
     'evaluationstrategy': MeanDistance,
     'evaluation_params': {
-        'distance_metric': variance
+        'distance_metric': nuclearnorm
     },
     'evolutionstrategy': GP,
     'evolution_params': {

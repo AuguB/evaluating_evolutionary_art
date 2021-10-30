@@ -184,7 +184,7 @@ class ArtSelectionScreen(AbstractScreen):
         self.scoresbuffer = np.zeros((int(self.view.grid_height*self.view.grid_width)))
 
         # set Paintings
-        self.img_padx, self.img_pady = 0, 0
+        self.img_padx, self.img_pady = 2,2
         self.image_width = int(
             (self.view.image_frame_width - self.view.grid_width * self.view.border_width * self.img_padx * 2) / self.view.grid_width)
         self.image_height = int(
@@ -288,6 +288,9 @@ class ArtSelectionScreen(AbstractScreen):
         self.scoresbuffer[c] += 1
         self.scoresbuffer %= self.params["scoring_granularity"]
         button.config(highlightbackground=self.rectangle_colors[int(self.scoresbuffer[c])])
+        button.config(bg=self.rectangle_colors[int(self.scoresbuffer[c])])
+        button.config(activebackground=self.rectangle_colors[int(self.scoresbuffer[c])])
+
 
     def new_run(self):
         self.reset_scores()

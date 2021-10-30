@@ -5,8 +5,9 @@ def euclidean(repa:Representation, repb:Representation):
     return np.linalg.norm(repa.get_output(10,10)-repb.get_output(10,10))
 
 def nuclearnorm(repa:Representation, repb:Representation):
-    outa = repa.get_output(10,10)
-    outb = repb.get_output(10,10)
+    dim = 100
+    outa = repa.get_output(dim,dim)
+    outb = repb.get_output(dim,dim)
     score = 0
     for i in range(outa.shape[-1]):
         score += np.linalg.norm(outa[:,:,i] - outb[:,:,i],ord='nuc')
