@@ -43,7 +43,7 @@ def main():
                     'tree_params':
                     {
                         'method': 'hybrid',
-                        'd_max': 7
+                        'd_max': 9
                     },
                     'ca_params':
                     {

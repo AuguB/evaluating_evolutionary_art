@@ -1,6 +1,6 @@
-from src.utils.archiver import Archiver
-from src.MVC.model import Model
-from src.MVC.view import View
+from utils.archiver import Archiver
+from MVC.model import Model
+from MVC.view import View
 import tkinter as Tk  # python 3
 from typing import List
 import numpy as np

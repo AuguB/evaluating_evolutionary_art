@@ -1,4 +1,4 @@
-from src.evolution.evolutionaryframework import EvolutionaryFramework
+from evolution.evolutionaryframework import EvolutionaryFramework
 
 
 class Model:

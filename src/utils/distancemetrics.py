@@ -1,5 +1,5 @@
 import numpy as np
-from src.evolution.representation import Representation
+from evolution.representation import Representation
 
 def euclidean(repa:Representation, repb:Representation):
     return np.linalg.norm(repa.get_output(10,10)-repb.get_output(10,10))

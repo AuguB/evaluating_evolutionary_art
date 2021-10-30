@@ -134,10 +134,10 @@ class NChannelTreeRepresentation(Representation):
         # Make another copy of all trees, used to copy stuff from
         other_tree_copies_from = other.tree_copy()
         my_tree_copies_from = self.tree_copy()
-        other_tree_copies_to = other.tree_copy()
-        for i in range(self.params['n']):
-            mycopy_to = my_tree_copies_to[i]
-            othercopy_from = other_tree_copies_from[i]
+        # other_tree_copies_to = other.tree_copy()
+        # for i in range(self.params['n_channels']):
+        #     mycopy_to = my_tree_copies_to[i]
+        #     othercopy_from = other_tree_copies_from[i]
 
         # Select a random color layer
         rand_tree_idx = np.random.randint(0, self.params['n_channels'])
@@ -145,6 +145,14 @@ class NChannelTreeRepresentation(Representation):
         other_copy_from = other_tree_copies_from[rand_tree_idx]
         my_copy_from = my_tree_copies_from[rand_tree_idx]
         other_copy_to = other_tree_copies_to[rand_tree_idx]
+
+        # If the trees are big enough, select two random nodes and transplant them
+        if my_copy_to.number_of_nodes() > 1 and other_copy_to.number_of_nodes() > 1:
+            idx_self = np.random.randint(1, my_copy_to.number_of_nodes())
+            idx_other = np.random.randint(1, other_copy_to.number_of_nodes())
+
+            self.transplant(my_copy_to, other_copy_from, idx_self, idx_other)
+            self.transplant(other_copy_to, my_copy_from, idx_other, idx_self)
 
         # Select two random nodes within the tree
         idx_self = np.random.randint(1, my_copy_to.number_of_nodes())

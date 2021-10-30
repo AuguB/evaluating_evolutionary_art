@@ -5,10 +5,10 @@ from MVC.model import Model
 from evolution.evolutionaryframework import EvolutionaryFramework
 from utils.archiver import Archiver
 from utils.distancemetrics import *
-from src.evolution.evaluationstrategy import *
-from src.evolution.evolutionstrategy import *
-from src.evolution.representation import *
-from src.evolution.selectionstrategy import *
+from evolution.evaluationstrategy import *
+from evolution.evolutionstrategy import *
+from evolution.representation import *
+from evolution.selectionstrategy import *
 
 # pattern =
 curdir = os.getcwd()
