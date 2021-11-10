@@ -20,7 +20,7 @@ class Archiver:
         self.score_and_string_csv = os.path.join(self.archivedir, 'info.csv')
         if not os.path.exists(self.score_and_string_csv):
             csv = open(self.score_and_string_csv, "w")
-            csv.write("Run,Iteration,Individual,Fitness,StringRepresentation\n")
+            csv.write("Run;Iteration;Individual;Fitness;StringRepresentation;LatexRepresentation\n")
             csv.close()
 
         self.runcount = 0
@@ -34,7 +34,7 @@ class Archiver:
         self.turing_results_csv = os.path.join(self.archivedir, 'turingtest.csv')
         if not os.path.exists(self.turing_results_csv):
             csv = open(self.turing_results_csv, "w")
-            csv.write("g,name1,name2,correct_idx,selected_idx\n")
+            csv.write("g;name1;name2;correct_idx;selected_idx\n")
             csv.close()
 
         self.tmp = \
@@ -55,7 +55,7 @@ class Archiver:
         self.make_iteration_dir()
         csv = open(self.score_and_string_csv, "a")
         for i, (f, ind) in enumerate(zip(fitnesses, population)):
-            csv.write(f"{self.runcount},{self.iterationcount},{i},{f},{str(ind)}\n")
+            csv.write(f"{self.runcount-1};{self.iterationcount-1};{i};{f};{str(ind)};{ind.latex_repr()}\n")
             im = Image.fromarray(np.uint8(ind.get_output(300, 300) * 255))
             im.save(os.path.join(self.currentiterdir, f"{i}.png"))
         csv.close()
@@ -131,7 +131,7 @@ class Archiver:
         csv = open(self.turing_results_csv, "a")
         if self.tmp['selection'] == -1:
             print("no selection made")
-        csv.write(','.join([self.tmp['g'], self.tmp['names'][0], self.tmp['names'][1], str(self.tmp['correct_idx']),
+        csv.write(';'.join([self.tmp['g'], self.tmp['names'][0], self.tmp['names'][1], str(self.tmp['correct_idx']),
                             str(self.tmp['selection'])]) + '\n')
         csv.close()
 

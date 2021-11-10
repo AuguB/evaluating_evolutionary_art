@@ -60,6 +60,9 @@ class Representation(ABC):
     def get_statistics(self):
         pass
 
+    def latex_repr(self):
+        pass
+
 
 # TODO Make a more general tree representation to avoid duplicate code
 # For example: Tree(1,1,1) could make a tree with 3 separate 1-channel trees, and Tree(3) could make a tree with 1
@@ -224,6 +227,9 @@ class NChannelTreeRepresentationV2(Representation):
     def __str__(self):
         return str(self.tree)
 
+    def latex_repr(self):
+        return self.tree.latex_repr()
+
     def __init__(self, params):
         super().__init__(params)
         self.name = 'tree_v2'
@@ -234,8 +240,9 @@ class NChannelTreeRepresentationV2(Representation):
             , (np.multiply, "*")
             , (safediv, "/")
             , (safepow, "^")
-            , (np.minimum, "min")
-            , (np.maximum, "max")]
+            # , (np.minimum, "min")
+            # , (np.maximum, "max")
+        ]
         self.F_un = [
             (np.sin, "sin"),
             (np.cos, "cos"),
@@ -292,6 +299,9 @@ class NChannelTreeRepresentationV2(Representation):
 
             self.transplant(mycopy_to, othercopy_from, idx_self, idx_other)
             self.transplant(othercopy_to, mycopy_from, idx_other, idx_self)
+
+        mycopy_to.refresh_depth()
+        othercopy_to.refresh_depth()
 
         tree1.tree = mycopy_to
         tree2.tree = othercopy_to

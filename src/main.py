@@ -58,7 +58,7 @@ def main():
                         'state_res': 50
                     }
                 },
-                'selectionstrategy': TournamentSelection,
+                'selectionstrategy': RouletteWheelSelection,
                 'selection_params':
                 {
                     'selection_pool_size': 5,

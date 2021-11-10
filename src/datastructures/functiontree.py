@@ -6,6 +6,9 @@ class FunctionTree:
     def __str__(self):
         pass
 
+    def latex_repr(self):
+        pass
+
     def __init__(self, params, func_idx, parent=None, key=None):
         self.key = key
         self.params = params
@@ -20,7 +23,7 @@ class FunctionTree:
 
     def sample_child(self):
         if self.params['method'] == 'full':
-            if self.depth < self.params['d_max']:
+            if self.depth < self.params['d_max']-1:
                 idx = random.randint(low=0, high=len(self.params['branch_samples']))
                 if idx < self.params['n_un']:
                     return UnaryBranch, idx
@@ -29,7 +32,7 @@ class FunctionTree:
             else:
                 return Leaf, random.randint(low=0, high=len(self.params['leaf_samples']))
         elif self.params['method'] == 'grow':
-            if self.depth < self.params['d_max']:
+            if self.depth < self.params['d_max']-1:
                 idx = random.randint(low=0, high=len(self.params['branch_samples']) + self.params['n_t'])
                 if idx < self.params['n_un']:
                     return UnaryBranch, idx
@@ -49,6 +52,9 @@ class FunctionTree:
     def max_depth(self):
         pass
 
+    def refresh_depth(self):
+        pass
+
     def number_of_nodes(self):
         return 1 + sum([i.number_of_nodes() for i in self.children.values()])
 
@@ -59,7 +65,7 @@ class FunctionTree:
 class BinaryBranch(FunctionTree):
 
     def __str__(self):
-        return f"({str(self.children['left'])}{self.funcname}{str(self.children['right'])})"
+        return f"{self.funcname}({str(self.children['left'])},{str(self.children['right'])})"
 
     def __init__(self, params, func_idx, parent=None, key=None):
         super().__init__(params, func_idx, parent, key)
@@ -92,6 +98,31 @@ class BinaryBranch(FunctionTree):
             return self.children['left'].get_nth_node(n - 1)
         else:
             return self.children['right'].get_nth_node(n - 1 - self.children['left'].number_of_nodes())
+
+    def latex_repr(self):
+
+        left_latex = self.children['left'].latex_repr()
+        right_latex = self.children['right'].latex_repr()
+        # Filter identity mappings first, i.e. the symbols that are actually used for the latex
+        if self.funcname in ['+','-','^']:
+            return "({"+left_latex+"}"+self.funcname+"{"+right_latex+"})"
+        # Filter min and max
+        elif self.funcname in ["min","max"]:
+            return "\\"+self.funcname+"("+left_latex+","+right_latex+")"
+        elif self.funcname == "*":
+            return "({"+left_latex+"}\cdot{"+right_latex+"})"
+        elif self.funcname == "/":
+            return "\\frac{"+left_latex+"}{"+right_latex+"}"
+        else:
+            return self.funcname+"("+left_latex+","+right_latex+")"
+
+    def refresh_depth(self):
+        if not self.parent:
+            self.depth = 0
+        else:
+            self.depth = self.parent.depth + 1
+        self.children['left'].refresh_depth()
+        self.children['right'].refresh_depth()
 
 
 class UnaryBranch(FunctionTree):
@@ -126,12 +157,33 @@ class UnaryBranch(FunctionTree):
         else:
             return self.children['middle'].get_nth_node(n - 1)
 
+    def latex_repr(self):
+        # Filter identities first
+        if self.funcname in ['sin','cos']:
+            return "\\"+self.funcname+"("+self.children['middle'].latex_repr()+")"
+        elif self.funcname == "sqrt":
+            return "\sqrt{"+self.children['middle'].latex_repr()+"}"
+        elif self.funcname == "abs":
+            return "|"+self.children['middle'].latex_repr()+"|"
+        else:
+            return self.funcname+"("+self.children['middle'].latex_repr()+")"
+
+    def refresh_depth(self):
+        if not self.parent:
+            self.depth = 0
+        else:
+            self.depth = self.parent.depth + 1
+        self.children['middle'].refresh_depth()
+
 
 class Leaf(FunctionTree):
     def __str__(self):
         if not self.func in ['x', 'y', 'z']:
             return str(np.round(self.func, 2))
         return self.func
+
+    def latex_repr(self):
+        return self.__str__()
 
     def __init__(self, params, func_idx, parent=None, key=None):
         super().__init__(params, func_idx, parent, key)
@@ -160,3 +212,9 @@ class Leaf(FunctionTree):
 
     def get_nth_node(self, n):
         return self
+
+    def refresh_depth(self):
+        if not self.parent:
+            self.depth = 0
+        else:
+            self.depth = self.parent.depth + 1
