@@ -10,7 +10,7 @@ def main():
 
     curdir = os.getcwd()
     # TODO Use to lower case here
-    while not curdir.endswith("Evaluating_Evolutionary_Art"):
+    while not curdir.lower().endswith("evaluating_evolutionary_art"):
         os.chdir(os.path.dirname(curdir))
         curdir = os.getcwd()
 

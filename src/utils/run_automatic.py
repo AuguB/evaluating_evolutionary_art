@@ -12,7 +12,7 @@ from evolution.selectionstrategy import *
 
 # pattern =
 curdir = os.getcwd()
-while not curdir.endswith("Evaluating_Evolutionary_Art"):
+while not curdir.lower().endswith("evaluating_evolutionary_art"):
     os.chdir(os.path.dirname(curdir))
     curdir = os.getcwd()
 
