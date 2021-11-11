@@ -27,16 +27,33 @@ class View:
         self.color_mode = self.params['color_mode']
         self.grid_height, self.grid_width = self.params['grid_dim']
         self.x, self.y = self.params['application_resolution']  # to do: make resolution part of settings later
-        self.x_pixels, self.y_pixels = self.params['painting_resolution']  # true image resolution\
+        self.x_pixels, self.y_pixels = self.params['painting_resolution']  # true image resolution
         self.border_width = self.border_height = 2
+
         self.button_bar_width = self.x / 7  # 100/7 % of the screen is allocated to buttons
         self.button_bar_height = self.y
-        self.image_frame_width = self.x - self.button_bar_width
-        self.image_frame_height = int(self.y - self.border_height * 2 * self.params['grid_dim'][0])
-        self.color_mode = self.params['color_mode']
-        self.grid_height, self.grid_width = self.params['grid_dim']
-        self.x, self.y = self.params['application_resolution']  # to do: make resolution part of settings later
-        self.x_pixels, self.y_pixels = self.params['painting_resolution']  # true image resolution
+
+        # Find full available space for images
+        self.image_frame_width_full = self.x - self.button_bar_width
+        self.image_frame_height_full = self.y
+
+        # Find proportion of the full space
+        self.proportion_full_xy = self.image_frame_width_full/self.image_frame_height_full
+
+        # Get the proportion of the effective used grid
+        self.proportion_used_xy = (self.x_pixels*self.params['grid_dim'][0])/ (self.y_pixels*self.params['grid_dim'][1])
+
+        # If the full has more x than y, adapt the effective grid to the y
+        if self.proportion_full_xy > self.proportion_used_xy:
+            self.image_frame_height = self.image_frame_height_full
+            self.image_frame_width = self.image_frame_height_full*self.proportion_used_xy
+        # Otherwise, adapt efffective grid to x
+        else:
+            self.image_frame_height = self.image_frame_width_full/ self.proportion_used_xy
+            self.image_frame_width = self.image_frame_width_full
+
+        self.x_pixels,self.y_pixels=self.image_frame_width/self.grid_width, self.image_frame_height/self.grid_height
+
         self.frames = self.params['anim_frames']
 
         # Root configurations
@@ -188,7 +205,7 @@ class ArtSelectionScreen(AbstractScreen):
         self.image_width = int(
             (self.view.image_frame_width - self.view.grid_width * self.view.border_width * self.img_padx * 2) / self.view.grid_width)
         self.image_height = int(
-            (self.view.image_frame_height - self.view.grid_height * self.view.border_width * self.img_pady * 2) / self.view.grid_height)
+            (self.view.image_frame_height - self.view.grid_height * self.view.border_height * self.img_pady * 2) / self.view.grid_height)
         self.view.control.set_image_dimensions(self.image_width, self.image_height)
 
         self.view.control.start_new_tree()
@@ -263,6 +280,11 @@ class ArtSelectionScreen(AbstractScreen):
                 img = img.resize((self.image_width, self.image_height), Image.ANTIALIAS)
                 self.pil_img.append(ImageTk.PhotoImage(
                     image=img))  # storing a copy is required to prevent the iamge disappearing in the garbage collection of tkinter
+
+                # self.buttons.append(Tk.Button(self.image_frame, image=self.pil_img[i], width=100,
+                #                               height=100, bd=5,
+                #                               borderwidth=self.view.border_width, activebackground='white', bg='white',
+                #                               relief='solid'))
 
                 self.buttons.append(Tk.Button(self.image_frame, image=self.pil_img[i], width=self.image_width - 5,
                                               height=self.image_height - 5, bd=5,

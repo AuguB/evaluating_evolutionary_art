@@ -120,6 +120,7 @@ class Archiver:
                 'correct_idx': 0 if reverse else 1,
                 'selection': -1
             }
+        print(self.tmp)
         return outputs
 
     def set_turing_selection(self, idx):

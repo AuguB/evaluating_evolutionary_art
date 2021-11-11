@@ -22,8 +22,8 @@ def main():
         'view_params': {
             'scoring_granularity': 4,
             'grid_dim': (grid_height, grid_width),
-            'application_resolution': (1200, 700),
-            'painting_resolution': (250, 250),
+            'application_resolution': (1600, 800),
+            'painting_resolution': (250, 170),
             'app_name': 'Evaluating Evolutionary Art',
             'color_mode': 'RGB',
             'anim_frames': 50,
